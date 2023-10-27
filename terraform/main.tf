@@ -125,7 +125,7 @@ data "template_cloudinit_config" "userdata" {
       groups = var.cloud_init_groups
       shell: var.cloud_init_user_shell
       ssh_key_list = element(local.ssh_authorized_keys, 0)
-      data_disks_count = var.kendryl_data_disk_count
+      data_disks_count = var.kyndryl_data_disk_count
     })
   }
 }
@@ -134,17 +134,17 @@ data "template_cloudinit_config" "userdata" {
 # Locals
 #
 locals {
-  # Kendryl VM
-  kendryl_prefix = format("%s-vm", var.vm_name_prefix)
-  kendryl_ip_offset = 0
+  # Kyndryl VM
+  kyndryl_prefix = format("%s-vm", var.vm_name_prefix)
+  kyndryl_ip_offset = 0
 }
 
 #
-# Kendryl VM
+# Kyndryl VM
 #
-resource "vsphere_virtual_machine" "vms_kendryl" {
-  count = var.kendryl_vm_count
-  name = format("%s-%02d", local.kendryl_prefix, count.index + 1)
+resource "vsphere_virtual_machine" "vms_kyndryl" {
+  count = var.kyndryl_vm_count
+  name = format("%s-%02d", local.kyndryl_prefix, count.index + 1)
 
   # Template boot mode (efi or bios)
   firmware = var.vm_firmware
@@ -158,8 +158,8 @@ resource "vsphere_virtual_machine" "vms_kendryl" {
   # Datastore and Storage Policy
   datastore_id = data.vsphere_datastore.my_datastore.id
 
-  num_cpus = var.kendryl_cpu_count
-  memory = var.kendryl_memory_gb * 1024
+  num_cpus = var.kyndryl_cpu_count
+  memory = var.kyndryl_memory_gb * 1024
 
   dynamic "network_interface" {
     for_each = data.vsphere_network.my_network
@@ -171,24 +171,24 @@ resource "vsphere_virtual_machine" "vms_kendryl" {
 
   # OS Disk
   disk {
-    label = format("%s-%02d-%s", local.kendryl_prefix, count.index + 1, "os")
-    size = var.kendryl_os_disk_gb
+    label = format("%s-%02d-%s", local.kyndryl_prefix, count.index + 1, "os")
+    size = var.kyndryl_os_disk_gb
     unit_number = 0
   }
 
    # SCSI controllers
-  scsi_controller_count = max(1, min(4, var.kendryl_data_disk_count + 1))
+  scsi_controller_count = max(1, min(4, var.kyndryl_data_disk_count + 1))
 
   # scsi0:0-14 are unit numbers 0-14
   # scsi1:0-14 are unit numbers 15-29
   # scsi2:0-14 are unit numbers 30-44
   # scsi3:0-14 are unit numbers 45-59
    dynamic "disk" {
-    for_each = range(1, var.kendryl_data_disk_count + 1)
+    for_each = range(1, var.kyndryl_data_disk_count + 1)
 
     content {
-      label             = format("%s-%02d-%s-disk%d", local.kendryl_prefix, count.index + 1, "data", disk.value)
-      size              = var.kendryl_data_disk_gb
+      label             = format("%s-%02d-%s-disk%d", local.kyndryl_prefix, count.index + 1, "data", disk.value)
+      size              = var.kyndryl_data_disk_gb
       unit_number       = 14 + (((disk.value - 1) % 3) * 14) + disk.value
     }
   }
@@ -205,12 +205,12 @@ resource "vsphere_virtual_machine" "vms_kendryl" {
 
     customize {
       linux_options {
-        host_name = format("%s-%02d", local.kendryl_prefix, count.index + 1)
+        host_name = format("%s-%02d", local.kyndryl_prefix, count.index + 1)
         domain = var.vm_network_domain
       }
 
       dynamic "network_interface" {
-        for_each = var.vm_network_ipv4_ips[local.kendryl_ip_offset + count.index]
+        for_each = var.vm_network_ipv4_ips[local.kyndryl_ip_offset + count.index]
           content {
             ipv4_address = network_interface.value.ipv4_address
             ipv4_netmask = network_interface.value.ipv4_netmask
@@ -237,10 +237,10 @@ resource "vsphere_virtual_machine" "vms_kendryl" {
     }
 }
 
-# Anti-affinity rules for Kendryl VM
+# Anti-affinity rules for Kyndryl VM
 resource "vsphere_compute_cluster_vm_anti_affinity_rule" "kafka_broker_vm_anti_affinity_rule" {
-  count               = var.kendryl_vm_count > 1 ? 1 : 0
-  name                = "kendrylvm-anti-affinity-rule"
+  count               = var.kyndryl_vm_count > 1 ? 1 : 0
+  name                = "kyndrylvm-anti-affinity-rule"
   compute_cluster_id  = data.vsphere_compute_cluster.my_compute_cluster.id
-  virtual_machine_ids = concat(vsphere_virtual_machine.vms_kendryl.*.id)
+  virtual_machine_ids = concat(vsphere_virtual_machine.vms_kyndryl.*.id)
 }

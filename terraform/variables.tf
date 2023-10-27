@@ -182,40 +182,40 @@ variable "vm_network_domain" {
 }
 
 #
-# Kendryl VM
+# Kyndryl VM
 #
-variable kendryl_vm_count {
-  description = "Number of Kendryl VM"
+variable kyndryl_vm_count {
+  description = "Number of Kyndryl VM"
   type = number
   default = 4
 }
 
-variable kendryl_cpu_count {
-  description = "Number of Kendryl VM vCPU"
+variable kyndryl_cpu_count {
+  description = "Number of Kyndryl VM vCPU"
   type = number
   default = 8
 }
 
-variable kendryl_memory_gb {
-  description = "Amount of Kendryl VM Memory in GB"
+variable kyndryl_memory_gb {
+  description = "Amount of Kyndryl VM Memory in GB"
   type = number
   default = 64
 }
 
-variable kendryl_os_disk_gb {
-  description = "Size of Kendryl VM OS Disk in GB"
+variable kyndryl_os_disk_gb {
+  description = "Size of Kyndryl VM OS Disk in GB"
   type = number
   default = 300
 }
 
-variable kendryl_data_disk_gb {
-  description = "Size of Kendryl VM Data Disk(s) in GB"
+variable kyndryl_data_disk_gb {
+  description = "Size of Kyndryl VM Data Disk(s) in GB"
   type = number
   default = 1024
 }
 
-variable kendryl_data_disk_count {
-  description = "Number of Kendryl VM Data Disks"
+variable kyndryl_data_disk_count {
+  description = "Number of Kyndryl VM Data Disks"
   type = number
   default = 1
 }

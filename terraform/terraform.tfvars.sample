@@ -8,20 +8,20 @@ vcenter_insecure_ssl = true
 vsphere_datacenter = "Datacenter"
 vsphere_compute_cluster ="Cluster"
 vsphere_datastore_name = "vsanDatastore"
-vsphere_resource_pool_name = "kendryl"
+vsphere_resource_pool_name = "kyndryl"
 vsphere_networks = [{name="VM Network", ovf_mapping="eth0"}]
 
 # Content library
-vsphere_content_library_name = "Kendryl Automation Content Library"
+vsphere_content_library_name = "Kyndryl Automation Content Library"
 vsphere_content_library_description = "A new source of content."
 vsphere_content_library_item_name = "Ubuntu 20.04"
 vsphere_content_library_item_description = "Ubuntu 20.40 Focal"
 vsphere_content_library_item_file_url =  "ova/focal-server-cloudimg-amd64.ova"
 
 # Cloud init
-cloud_init_username = "kendryl"
-cloud_init_password = "kendryl123!"
-cloud_init_primary_group = "kendryl"
+cloud_init_username = "kyndryl"
+cloud_init_password = "kyndryl123!"
+cloud_init_primary_group = "kyndryl"
 cloud_init_groups = "wheel"
 cloud_init_user_shell = "/bin/bash"
 
@@ -30,17 +30,17 @@ cloud_init_user_shell = "/bin/bash"
 #rsa_public_key_file = "~/.ssh/id_rsa.pub"
 
 # VM
-vm_name_prefix = "kendryl"
+vm_name_prefix = "kyndryl"
 vm_firmware = "efi"
 vm_hardware_version = 19
 
-# Kendryl VM
-kendryl_vm_count = 3
-kendryl_cpu_count = 8
-kendryl_memory_gb = 64
-kendryl_os_disk_gb = 512
-kendryl_data_disk_gb = 1024
-kendryl_data_disk_count = 1
+# Kyndryl VM
+kyndryl_vm_count = 3
+kyndryl_cpu_count = 8
+kyndryl_memory_gb = 64
+kyndryl_os_disk_gb = 512
+kyndryl_data_disk_gb = 1024
+kyndryl_data_disk_count = 1
 
 # VM Networking
 vm_network_ipv4_gateway = "172.16.100.1"
